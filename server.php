@@ -19,7 +19,7 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 		return;
 	}
 	//分析消息
-	$messagejson = json_decode($message);
+	$messagejson = json_encode($message);
 	
 	echo $messagejson;
 	switch($messagejson.type){
