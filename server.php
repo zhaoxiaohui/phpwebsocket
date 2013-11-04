@@ -20,7 +20,8 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	}
 	//分析消息
 	$messagejson = json_decode($message);
-	echo $messagejson.type;
+	
+	echo $messagejson;
 	switch($messagejson.type){
 		case "login":
 			if($taobao->login($messagejson.playboard.username,$messagejson.playboard.password)){
