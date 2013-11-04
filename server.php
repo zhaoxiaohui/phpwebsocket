@@ -21,13 +21,13 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	//分析消息
 	$messagejson = json_encode($message);
 	
-	echo $messagejson;
-	switch($messagejson.type){
+	var_dump($messagejson);
+	switch($messagejson->type){
 		case "login":
-			if($taobao->login($messagejson.playboard.username,$messagejson.playboard.password)){
+			if($taobao->login($messagejson->playboard["username"],$messagejson->playboard["password"])){
 				$clients[$messagejson.playboard.username] = long2ip( $Server->wsClients[$clientID][6] );
 			}
-			$msg = array("type"=>"login","playboard"=>array("login"=>$messagejson.playboard.username));
+			$msg = array("type"=>"login","playboard"=>array("login"=>$messagejson->playboard["username"]));
 			$Server->wsSend($clientID, json_encode($msg));
 			break;
 	}
