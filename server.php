@@ -12,6 +12,7 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	global $taobao;
 	global $clints;
 	global $Server;
+	echo $message;
 	// check if message length is 0
 	if ($messageLength == 0) {
 		$Server->wsClose($clientID);
@@ -19,6 +20,7 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	}
 	//分析消息
 	$messagejson = json_decode($message);
+	echo $messagejson.type;
 	switch($messagejson.type){
 		case "login":
 			if($taobao->login($messagejson.playboard.username,$messagejson.playboard.password)){
@@ -78,6 +80,6 @@ $Server->bind('open', 'wsOnOpen');
 $Server->bind('close', 'wsOnClose');
 // for other computers to connect, you will probably need to change this to your LAN IP or external IP,
 // alternatively use: gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME']))
-$Server->wsStartServer('127.0.0.1', 9300);
+$Server->wsStartServer('0.0.0.1', 9300);
 
 ?>
