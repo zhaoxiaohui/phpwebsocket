@@ -12,26 +12,27 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	global $taobao;
 	global $clints;
 	global $Server;
-	echo $message;
 	// check if message length is 0
 	if ($messageLength == 0) {
 		$Server->wsClose($clientID);
 		return;
 	}
 	//分析消息
-	$messagejson = json_encode($message);
-	
+	$messagejson = json_decode($message,true);
+
 	var_dump($messagejson);
-	switch($messagejson->type){
+	switch($messagejson["type"]){
 		case "login":
-			if($taobao->login($messagejson->playboard["username"],$messagejson->playboard["password"])){
-				$clients[$messagejson.playboard.username] = long2ip( $Server->wsClients[$clientID][6] );
-			}
-			$msg = array("type"=>"login","playboard"=>array("login"=>$messagejson->playboard["username"]));
+			$msg = null;
+            if($taobao->login($messagejson["playboard"]["username"],$messagejson["playboard"]["password"])){
+				$clients[$messagejson["playboard"]["username"]] = long2ip( $Server->wsClients[$clientID][6] );
+			    $msg = array("type"=>"login","playboard"=>array("login"=>$messagejson["playboard"]["username"]));
+            }
+            else $msg = array("type"=>"login","playboard"=>array("login"=>null));
 			$Server->wsSend($clientID, json_encode($msg));
 			break;
 	}
-	$Server->wsSend($clientID, "xx");
+	//$Server->wsSend($clientID, "xx");
 	/**
 	$ip = long2ip( $Server->wsClients[$clientID][6] );
 	//The speaker is the only person in the room. Don't let them feel lonely.
