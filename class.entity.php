@@ -7,17 +7,11 @@
  */
  
 class User{
-	private $clientid = null;
-	private $curip = null;
+	public $clientid = null;
+	public $curip = null;
 	public function User($id, $ip){
 		$clientid = $id;
 		$curip = $ip;
-	}
-	public function getClientid(){
-		return $this->clientid;
-	}
-	public function getCurip(){
-		return $this->curip;
 	}
 }
 

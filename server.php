@@ -42,7 +42,7 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 			var_dump($onlines);
 			$to = $onlines->getUser($messagejson["playboard"]["to"]);
 			if($to)
-            	$Server->wsSend($to->getClientid(),$message);
+            	$Server->wsSend($to->clientid,$message);
 			break;
 	}
 	//$Server->wsSend($clientID, "xx");
