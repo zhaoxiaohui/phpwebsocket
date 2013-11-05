@@ -26,7 +26,8 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 		case "login":
 			$msg = null;
             if($taobao->login($messagejson["playboard"]["username"],$messagejson["playboard"]["password"])){
-				$clients[$messagejson["playboard"]["username"]] = long2ip( $Server->wsClients[$clientID][6] );
+				$clients[$messagejson["playboard"]["username"]]->ip = long2ip( $Server->wsClients[$clientID][6] );
+				$clients[$messagejson["playboard"]["username"]]->clientid = $clientID;
 			    $msg = array("type"=>"login","playboard"=>array("login"=>$messagejson["playboard"]["username"]));
             }
             else $msg = array("type"=>"login","playboard"=>array("login"=>null));
@@ -34,6 +35,10 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 			break;
 		case "getfriends":
 			$Server->wsSend($clientID, $db->getFriends($messagejson["playboard"]["username"]));
+			break;
+		case "conversation":
+			if($messagejson["playboard"]["to"] != null && in_array($messagejson["playboard"]["to"],$clients))
+				$Server->wsSend($clients[$messagejson["playboard"]["to"]]->cliendid,$message);
 			break;
 	}
 	//$Server->wsSend($clientID, "xx");
@@ -76,7 +81,6 @@ function wsOnClose($clientID, $status) {
 }
 
 $clients = array();
-
 $taobao = new Taobao();
 $db = new DB();
 // start the server
