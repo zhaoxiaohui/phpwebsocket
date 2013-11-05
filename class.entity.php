@@ -20,6 +20,7 @@ class OnLineUser{
 	
 	public function addUser($user, $name){
 		$this->users[$name] = $user;
+		print_r($this->users[$name]);
 	}
 	public function getUser($name){
 		if(in_array($name,$this->users)){
