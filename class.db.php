@@ -8,7 +8,7 @@
  class DB{
  	function DB(){}
  	function getFriends($username){
- 		 	$msg = array(array(
+ 		 	$msg = array("type"=>"getfriends","playboard"=>array(
 					"name"=>"xxx",
 					"label"=>array("1","2","3"),
 					"img"=>""
