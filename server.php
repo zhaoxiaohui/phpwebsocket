@@ -5,13 +5,14 @@ set_time_limit(0);
 // include the web sockets server script (the server is started at the far bottom of this file)
 require 'class.PHPWebSocket.php';
 require 'class.taobao.php';
-
+require 'class.db.php';
 // when a client sends data to the server
 function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	
 	global $taobao;
 	global $clints;
 	global $Server;
+	global $db;
 	// check if message length is 0
 	if ($messageLength == 0) {
 		$Server->wsClose($clientID);
@@ -30,6 +31,9 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
             }
             else $msg = array("type"=>"login","playboard"=>array("login"=>null));
 			$Server->wsSend($clientID, json_encode($msg));
+			break;
+		case "getfriends":
+			$Server->wsSend($clientID, $db->getFriends($messagejson["playboard"]["username"]));
 			break;
 	}
 	//$Server->wsSend($clientID, "xx");
@@ -74,7 +78,7 @@ function wsOnClose($clientID, $status) {
 $clients = array();
 
 $taobao = new Taobao();
-
+$db = new DB();
 // start the server
 $Server = new PHPWebSocket();
 $Server->bind('message', 'wsOnMessage');
