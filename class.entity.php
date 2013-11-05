@@ -10,8 +10,8 @@ class User{
 	public $clientid = null;
 	public $curip = null;
 	public function User($id, $ip){
-		$clientid = $id;
-		$curip = $ip;
+		$this->clientid = $id;
+		$this->curip = $ip;
 	}
 }
 
