@@ -6,11 +6,12 @@ set_time_limit(0);
 require 'class.PHPWebSocket.php';
 require 'class.taobao.php';
 require 'class.db.php';
+require 'class.entity.php';
 // when a client sends data to the server
 function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	
 	global $taobao;
-	global $clints;
+	global $onlines;
 	global $Server;
 	global $db;
 	// check if message length is 0
@@ -26,8 +27,8 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 		case "login":
 			$msg = null;
             if($taobao->login($messagejson["playboard"]["username"],$messagejson["playboard"]["password"])){
-				$clients[$messagejson["playboard"]["username"]]->ip = long2ip( $Server->wsClients[$clientID][6] );
-				$clients[$messagejson["playboard"]["username"]]->clientid = $clientID;
+            	$user = new User($clientID,long2ip( $Server->wsClients[$clientID][6]));
+				$onlines->addUser($user,$messagejson["playboard"]["username"]);
 			    $msg = array("type"=>"login","playboard"=>array("login"=>$messagejson["playboard"]["username"]));
             }
             else $msg = array("type"=>"login","playboard"=>array("login"=>null));
@@ -38,8 +39,10 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 			break;
 		case "conversation":
 			//if($messagejson["playboard"]["to"] != null && in_array($messagejson["playboard"]["to"],$clients))
-			var_dump($clients);
-            $Server->wsSend($clients[$messagejson["playboard"]["to"]]->cliendid,$message);
+			var_dump($onlines);
+			$to = $onlines->getUser($messagejson["playboard"]["to"]);
+			if($to)
+            	$Server->wsSend($to->getClientid(),$message);
 			break;
 	}
 	//$Server->wsSend($clientID, "xx");
@@ -81,7 +84,7 @@ function wsOnClose($clientID, $status) {
 		$Server->wsSend($id, "Visitor $clientID ($ip) has left the room.");
 }
 
-$clients = array();
+$onlines = new OnLineUser();
 $taobao = new Taobao();
 $db = new DB();
 // start the server

@@ -7,17 +7,31 @@
  */
  
 class User{
-	private $username = null;
+	private $clientid = null;
 	private $curip = null;
-	public function User($name, $ip){
-		$username = $name;
+	public function User($id, $ip){
+		$clientid = $id;
 		$curip = $ip;
 	}
-	public function getUsername(){
-		return $username;
+	public function getClientid(){
+		return $this->clientid;
 	}
 	public function getCurip(){
-		return $curip;
+		return $this->curip;
+	}
+}
+
+class OnLineUser{
+	private $users = array();
+	
+	public function addUser($user, $name){
+		$this->users[$name] = $user;
+	}
+	public function getUser($name){
+		if(in_array($name,$this->users)){
+			return $this->users[$name];
+		}
+		return null;
 	}
 }
 ?>
