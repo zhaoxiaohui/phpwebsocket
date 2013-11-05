@@ -17,7 +17,11 @@
 					"name"=>"yy2",
 					"label"=>array("1","2","3"),
 					"img"=>""
-				))
+				),array(
+                    "name"=>"赵辉",
+                    "label"=>null,
+                    "img"=>""
+                ))
 			);
 			return json_encode($msg);
  	}
