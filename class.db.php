@@ -9,7 +9,7 @@
  	function DB(){}
  	function getFriends($username){
  		 	$msg = array("type"=>"getfriends","playboard"=>array(array(
-					"name"=>"xxx",
+					"name"=>"20000",
 					"label"=>array("1","2","3"),
 					"img"=>""
 				),array(
