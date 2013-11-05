@@ -8,7 +8,10 @@
  class DB{
  	function DB(){}
  	function getFriends($username){
+            $msg = null;
+            if($username != "20000")
  		 	$msg = array("type"=>"getfriends","playboard"=>array(array(
+
 					"name"=>"20000",
 					"label"=>array("1","2","3"),
 					"img"=>""
@@ -23,6 +26,12 @@
                     "img"=>""
                 ))
 			);
+            else
+                $msg = array("type"=>"getfriends","playboard"=>array(array(
+                    "name"=>"10000",
+                    "label"=>null,
+                    "img"=>"")));
+
 			return json_encode($msg);
  	}
  }

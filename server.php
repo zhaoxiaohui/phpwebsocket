@@ -37,8 +37,9 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 			$Server->wsSend($clientID, $db->getFriends($messagejson["playboard"]["username"]));
 			break;
 		case "conversation":
-			if($messagejson["playboard"]["to"] != null && in_array($messagejson["playboard"]["to"],$clients))
-				$Server->wsSend($clients[$messagejson["playboard"]["to"]]->cliendid,$message);
+			//if($messagejson["playboard"]["to"] != null && in_array($messagejson["playboard"]["to"],$clients))
+			var_dump($clients);
+            $Server->wsSend($clients[$messagejson["playboard"]["to"]]->cliendid,$message);
 			break;
 	}
 	//$Server->wsSend($clientID, "xx");
