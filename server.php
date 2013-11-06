@@ -22,7 +22,7 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 	//分析消息
 	$messagejson = json_decode($message,true);
 
-	var_dump($messagejson);
+	//var_dump($messagejson);
 	switch($messagejson["type"]){
 		case "login":
 			$msg = null;
@@ -39,9 +39,11 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 			break;
 		case "conversation":
 			//if($messagejson["playboard"]["to"] != null && in_array($messagejson["playboard"]["to"],$clients))
-			var_dump($onlines);
+			//var_dump($onlines);
 			$to = $onlines->getUser($messagejson["playboard"]["to"]);
-			if($to)
+			var_dump($to);
+            //var_dump($to.clientid);
+            if($to)
             	$Server->wsSend($to->clientid,$message);
 			break;
 	}
@@ -80,8 +82,8 @@ function wsOnClose($clientID, $status) {
 	$Server->log( "$ip ($clientID) has disconnected." );
 
 	//Send a user left notice to everyone in the room
-	foreach ( $Server->wsClients as $id => $client )
-		$Server->wsSend($id, "Visitor $clientID ($ip) has left the room.");
+	//foreach ( $Server->wsClients as $id => $client )
+	//	$Server->wsSend($id, "Visitor $clientID ($ip) has left the room.");
 }
 
 $onlines = new OnLineUser();

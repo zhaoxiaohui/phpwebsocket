@@ -23,9 +23,11 @@ class OnLineUser{
 		print_r($this->users[$name]);
 	}
 	public function getUser($name){
-		if(in_array($name,$this->users)){
+        print_r($name);
+		if(array_key_exists($name,$this->users)){
 			return $this->users[$name];
 		}
+        print_r("false");
 		return null;
 	}
 }
