@@ -7,10 +7,10 @@
  */
  
 class User{
-	public $clientid = null;
+	public $username = null;
 	public $curip = null;
-	public function User($id, $ip){
-		$this->clientid = $id;
+	public function User($username, $ip){
+		$this->username = $username;
 		$this->curip = $ip;
 	}
 }
@@ -18,17 +18,27 @@ class User{
 class OnLineUser{
 	private $users = array();
 	
-	public function addUser($user, $name){
-		$this->users[$name] = $user;
-		print_r($this->users[$name]);
+	public function addUser($user, $clientid){
+		$this->users[$clientid] = $user;
+		print_r($this->users[$clientid]);
 	}
 	public function getUser($name){
         print_r($name);
-		if(array_key_exists($name,$this->users)){
-			return $this->users[$name];
-		}
+        foreach($this->users as $key=>$user){
+            if($user->username == $name){
+                return $key;
+            }
+        }
+		//if(array_key_exists($name,$this->users)){
+		//	return $this->users[$name];
+		//}
         print_r("false");
 		return null;
 	}
+    public function removeUser($clientid){
+        if(array_key_exists($clientid,$this->users)){
+            unset($this->users[$clientid]);    
+        }       
+    }
 }
 ?>

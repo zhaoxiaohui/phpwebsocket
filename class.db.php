@@ -32,6 +32,7 @@
                     "label"=>null,
                     "img"=>"")));
 
+            print_r($msg);
 			return json_encode($msg);
  	}
  }

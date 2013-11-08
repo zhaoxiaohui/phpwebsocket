@@ -27,8 +27,8 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 		case "login":
 			$msg = null;
             if($taobao->login($messagejson["playboard"]["username"],$messagejson["playboard"]["password"])){
-            	$user = new User($clientID,long2ip( $Server->wsClients[$clientID][6]));
-				$onlines->addUser($user,$messagejson["playboard"]["username"]);
+            	$user = new User($messagejson["playboard"]["username"],long2ip( $Server->wsClients[$clientID][6]));
+				$onlines->addUser($user,$clientID);
 			    $msg = array("type"=>"login","playboard"=>array("login"=>$messagejson["playboard"]["username"]));
             }
             else $msg = array("type"=>"login","playboard"=>array("login"=>null));
@@ -40,11 +40,11 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 		case "conversation":
 			//if($messagejson["playboard"]["to"] != null && in_array($messagejson["playboard"]["to"],$clients))
 			//var_dump($onlines);
-			$to = $onlines->getUser($messagejson["playboard"]["to"]);
-			var_dump($to);
+			$toid = $onlines->getUser($messagejson["playboard"]["to"]);
+			var_dump($toid);
             //var_dump($to.clientid);
-            if($to)
-            	$Server->wsSend($to->clientid,$message);
+            if($toid)
+            	$Server->wsSend($toid,$message);
 			break;
 	}
 	//$Server->wsSend($clientID, "xx");
@@ -77,10 +77,12 @@ function wsOnOpen($clientID)
 // when a client closes or lost connection
 function wsOnClose($clientID, $status) {
 	global $Server;
+    global $onlines;
 	$ip = long2ip( $Server->wsClients[$clientID][6] );
 
 	$Server->log( "$ip ($clientID) has disconnected." );
 
+    $onlines->removeUser($clientID);
 	//Send a user left notice to everyone in the room
 	//foreach ( $Server->wsClients as $id => $client )
 	//	$Server->wsSend($id, "Visitor $clientID ($ip) has left the room.");
